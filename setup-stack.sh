@@ -4,7 +4,8 @@
 # variable to contain the version of GHC we want to use, as well as a
 # 'stack-$GHC.yaml' file present in the current directory, which will then be
 # symlinked to 'stack.yaml' so that it is the default. Installs the required
-# version of GHC into the local sandbox.
+# version of GHC into the local sandbox, but adds a symlink to it at
+# $HOME/bin/ghc.
 #
 # Setting environment variable UPGRADE_CABAL to non-zero will do as it suggests.
 #
@@ -19,10 +20,11 @@ mv stack-*/stack $HOME/bin
 
 if [ ${GHC} != head ]; then
   ln -s stack-${GHC%.*}.yaml stack.yaml
-  travis_retry stack setup --no-terminal --no-system-ghc
+  travis_retry stack setup ${GHC} --no-terminal --no-system-ghc
+  ln -s $(stack exec which -- ghc) $HOME/bin/ghc
 fi
 
 if [ ${GHC} != head -a ${UPGRADE_CABAL} ]; then
-  travis retry stack setup --no-terminal --upgrade-cabal
+  travis retry stack setup ${GHC} --no-terminal --upgrade-cabal
 fi
 
