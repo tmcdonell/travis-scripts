@@ -1,4 +1,8 @@
 # vim: nospell
+#
+# Tests against CUDA=[6.5, 7.0, 7.5], GHC=[7.8, 7.10, 8.0].
+# Requires sudo in order to install recent versions of CUDA.
+#
 language: generic
 dist: trusty
 sudo: required
