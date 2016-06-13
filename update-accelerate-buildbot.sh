@@ -11,7 +11,8 @@ set -ex
 
 SOURCE_BRANCH=master
 TARGET_BRANCH=master
-BUILDBOT_URL=git@github.com:tmcdonell/accelerate-travis-buildbot.git
+BUILDBOT_HTTPS_URL=https://github.com/tmcdonell/accelerate-travis-buildbot.git
+BUILDBOT_SSH_URL=${BUILDBOT_HTTPS_URL/https:\/\/github.com\//git@github.com:}
 
 # Find out who initiated the build
 TRAVIS_COMMIT_EMAIL=$(git --no-pager show -s --format='%ae' HEAD)
@@ -26,7 +27,7 @@ if [ ${TRAVIS_PULL_REQUEST} != false -o ${TRAVIS_BRANCH} != ${SOURCE_BRANCH} ]; 
 fi
 
 # Check out and configure the buildbot repo
-travis_retry git clone ${BUILDBOT_URL} buildbot
+travis_retry git clone ${BUILDBOT_HTTPS_URL} buildbot
 cd buildbot
 git checkout ${TARGET_BRANCH}
 
@@ -66,5 +67,5 @@ eval $(ssh-agent -s)
 ssh-add deploy_key
 
 # Now we can push to the buildbot repository
-git push ${BUILDBOT_URL} ${TARGET_BRANCH}
+git push ${BUILDBOT_SSH_URL} ${TARGET_BRANCH}
 
