@@ -10,6 +10,12 @@ export LLVM_HOME=${HOME}/llvm-${LLVM}
 export PATH=${LLVM_HOME}/bin:${PATH}
 export LD_LIBRARY_PATH=${LLVM_HOME}/lib:${LD_LIBRARY_PATH}
 
+if [ ${LLVM%.*} == 3.4 ]; then
+  EXT="xz"
+else
+  EXT="tar.xz"
+fi
+
 mkdir -p ${LLVM_HOME}
-travis_retry curl -L "http://llvm.org/releases/${LLVM}/clang+llvm-${LLVM}-x86_64-linux-gnu-ubuntu-14.04.tar.xz" | unxz | tar -x -C ${LLVM_HOME} --strip-components 1
+travis_retry curl -L "http://llvm.org/releases/${LLVM}/clang+llvm-${LLVM}-x86_64-linux-gnu-ubuntu-14.04.${EXT}" | unxz | tar -x -C ${LLVM_HOME} --strip-components 1
 
