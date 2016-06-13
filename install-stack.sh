@@ -26,6 +26,6 @@ else
 fi
 
 if [ ${GHC} != head -a ${UPGRADE_CABAL:-0} -ne 0 ]; then
-  travis retry stack setup ${GHC} --no-terminal --upgrade-cabal
+  travis_retry stack setup ${GHC} --no-terminal --upgrade-cabal
 fi
 
