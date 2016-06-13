@@ -7,8 +7,6 @@
 # Based on: https://gist.github.com/domenic/ec8b0fc8ab45f39403dd
 #
 
-set -ex
-
 SOURCE_BRANCH=master
 TARGET_BRANCH=master
 BUILDBOT_HTTPS_URL=https://github.com/tmcdonell/accelerate-travis-buildbot.git
@@ -36,8 +34,8 @@ git config user.email ${TRAVIS_COMMIT_EMAIL}
 
 # Update the replacement script
 cat update_template.sed \
-  | sed "s/|{REPO_${REPO_NAME}}|/s|{REPO_${REPO_NAME}}|${TRAVIS_REPO_SLUG}|g/" \
-  | sed "s/|{SHA_${REPO_NAME}}|/s|{SHA_${REPO_NAME}}|${TRAVIS_COMMIT}|/" \
+  | sed "s#.*|{REPO_${REPO_NAME}}|.*#s|{REPO_${REPO_NAME}}|${TRAVIS_REPO_SLUG}|g#" \
+  | sed "s#.*|{SHA_${REPO_NAME}}|.*#s|{SHA_${REPO_NAME}}|${TRAVIS_COMMIT}|#" \
   > update_template.sed.bak
 
 mv update_template.sed.bak update_template.sed
@@ -51,7 +49,7 @@ sed -f update_template.sed template/README.md.template       > README.md
 # If there is no change then there is nothing left to do so we can exit early
 # (this can happen because it is a race to see who successfully completes their
 # entry of the build matrix, and thus updates the buildbot repo)
-if [ -z `git diff --exit-code` ]; then
+if git diff --quiet; then
   echo "No update necessary; exiting."
   exit 0
 fi
