@@ -7,7 +7,7 @@
 # Based on: https://gist.github.com/domenic/ec8b0fc8ab45f39403dd
 #
 
-set -e
+set -ex
 
 SOURCE_BRANCH=master
 TARGET_BRANCH=master
@@ -20,7 +20,7 @@ REPO_NAME=${TRAVIS_REPO_SLUG#*/}
 REPO_OWNER=${TRAVIS_REPO_SLUG%/*}
 
 # Pull requests or commits to other branches shouldn't update the buildbot
-if [ ${TRAVIS_PULL_REQUEST} != falso -o ${TRAVIS_BRANCH} != ${SOURCE_BRANCH} ]; then
+if [ ${TRAVIS_PULL_REQUEST} != false -o ${TRAVIS_BRANCH} != ${SOURCE_BRANCH} ]; then
   echo "Skipping buildbot update"
   exit 0
 fi
