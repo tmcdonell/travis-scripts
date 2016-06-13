@@ -43,10 +43,10 @@ cat update_template.sed \
 mv update_template.sed.bak update_template.sed
 
 # Update the templates.
-sed -f update_template.sed stack-8.0.yaml.template  > stack-8.0.yaml
-sed -f update_template.sed stack-7.8.yaml.template  > stack-7.8.yaml
-sed -f update_template.sed stack-7.10.yaml.template > stack-7.10.yaml
-sed -f update_template.sed README.md.template       > README.md
+sed -f update_template.sed template/stack-8.0.yaml.template  > stack-8.0.yaml
+sed -f update_template.sed template/stack-7.8.yaml.template  > stack-7.8.yaml
+sed -f update_template.sed template/stack-7.10.yaml.template > stack-7.10.yaml
+sed -f update_template.sed template/README.md.template       > README.md
 
 # If there is no change then there is nothing left to do so we can exit early
 # (this can happen because it is a race to see who successfully completes their
@@ -61,7 +61,7 @@ git add .
 git commit -m "Update dependency: ${TRAVIS_REPO_SLUG}"
 
 # Get the deploy key from the travis encrypted file
-openssl aes-256-cbc -K $encrypted_84f64e889fa8_key -iv $encrypted_84f64e889fa8_iv -in deploy_key.enc -out private/deploy_key -d
+openssl aes-256-cbc -K $encrypted_deploy_key -iv $encrypted_deploy_iv -in deploy_key.enc -out deploy_key -d
 chmod 600 deploy_key
 eval $(ssh-agent -s)
 ssh-add deploy_key
