@@ -21,8 +21,6 @@ mv stack-*/stack $HOME/bin
 if [ ${GHC} != head ]; then
   ln -s stack-${GHC%.*}.yaml stack.yaml
   travis_retry stack setup ${GHC} --no-terminal --no-system-ghc
-  ln -s $(stack exec which -- ghc)     ${HOME}/bin/ghc      # possibly bad idea
-  ln -s $(stack exec which -- ghc-pkg) ${HOME}/bin/ghc-pkg
 else
   export PATH=/opt/ghc/$GHC/bin:${PATH}
 fi
