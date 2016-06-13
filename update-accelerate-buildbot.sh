@@ -7,6 +7,11 @@
 # Based on: https://gist.github.com/domenic/ec8b0fc8ab45f39403dd
 #
 
+if [ -z "${encrypted_deploy_key}" -o -z "${encrypted_deploy_iv}" ]; then
+  echo "Deploy keys not available; exiting."
+  return 0
+fi
+
 SOURCE_BRANCH=master
 TARGET_BRANCH=master
 BUILDBOT_HTTPS_URL=https://github.com/tmcdonell/accelerate-travis-buildbot.git
@@ -21,7 +26,7 @@ REPO_OWNER=${TRAVIS_REPO_SLUG%/*}
 # Pull requests or commits to other branches shouldn't update the buildbot
 if [ ${TRAVIS_PULL_REQUEST} != false -o ${TRAVIS_BRANCH} != ${SOURCE_BRANCH} ]; then
   echo "Skipping buildbot update"
-  exit 0
+  return 0
 fi
 
 # Check out and configure the buildbot repo
@@ -51,7 +56,7 @@ sed -f update_template.sed template/README.md.template       > README.md
 # entry of the build matrix, and thus updates the buildbot repo)
 if git diff --quiet; then
   echo "No update necessary; exiting."
-  exit 0
+  return 0
 fi
 
 # Commit the new version
@@ -59,7 +64,7 @@ git add .
 git commit -m "Update dependency: ${TRAVIS_REPO_SLUG}"
 
 # Get the deploy key from the travis encrypted file
-openssl aes-256-cbc -K $encrypted_deploy_key -iv $encrypted_deploy_iv -in deploy_key.enc -out deploy_key -d
+openssl aes-256-cbc -K ${encrypted_deploy_key} -iv ${encrypted_deploy_iv} -in deploy_key.enc -out deploy_key -d
 chmod 600 deploy_key
 eval $(ssh-agent -s)
 ssh-add deploy_key
