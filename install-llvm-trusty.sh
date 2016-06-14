@@ -15,7 +15,7 @@ mkdir -p ${LLVM_HOME}
 
 # If llvm is already installed (i.e. retrieved from cache) we are done
 #
-if [ ( -x ${LLVM_HOME}/bin/llc ) -a ( -x ${LLVM_HOME}/bin/opt ) -a ( ${LLVM_BINARY_RELEASE:-1} -o ( -e ${LLVM_HOME}/lib/libLLVM-${LLVM}.so ) ) ]; then
+if [ -x ${LLVM_HOME}/bin/llc ] &&  [ -x ${LLVM_HOME}/bin/opt ] && [ ${LLVM_BINARY_RELEASE:-0} -o -e ${LLVM_HOME}/lib/libLLVM-${LLVM}.so ]; then
   return 0
 fi
 
@@ -25,6 +25,8 @@ fi
 #
 if [ ${LLVM_BINARY_RELEASE:-0} -ne 0 ]; then
 
+  echo "Downloading LLVM binary release"
+
   # Download the binary release, and unpack directly into the final location
   case ${LLVM} in
     3.4.*) travis_retry curl -L "http://llvm.org/releases/${LLVM}/clang+llvm-${LLVM}-x86_64-linux-gnu-ubuntu-14.04.xz"     | unxz | tar -x -C ${LLVM_HOME} --strip-components 1 ;;
@@ -32,6 +34,8 @@ if [ ${LLVM_BINARY_RELEASE:-0} -ne 0 ]; then
   esac
 
 else
+
+  echo "Installing LLVM from source release"
 
   TMPDIR=$(mktemp -d)
 
@@ -44,6 +48,7 @@ else
   # Configure, build, install
   pushd ${TMPDIR}
   ./configure --prefix=${LLVM_HOME} --enable-shared --enable-targets=host,x86,x86_64,nvptx
+  make -j3
   make install
   popd
 
