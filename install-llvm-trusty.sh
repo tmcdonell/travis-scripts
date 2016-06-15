@@ -20,7 +20,7 @@ if [ -x ${LLVM_HOME}/bin/llc ] &&  [ -x ${LLVM_HOME}/bin/opt ] && [ ${LLVM_BINAR
 fi
 
 # Download and install. By default choose the source release. This takes longer
-# to insall the first time, but we will probably need the shared library it
+# to install the first time, but we will probably need the shared library it
 # provides.
 #
 if [ ${LLVM_BINARY_RELEASE:-0} -ne 0 ]; then
@@ -55,5 +55,12 @@ else
   # Delete the temporary build directory
   rm -rf ${TMPDIR}
 
+fi
+
+# Hint at GHC that a newer/modern version of g++ is available (installed via
+# apt). This is a bit of a hack, but is required for llvm-general (>= 3.5.*).
+#
+if [ $(which gcc-4.8) ] && [ -e stack.yaml ]; then
+  sed -i'' -e "s,/usr/bin/gcc,/usr/bin/gcc-4.8," $(stack path --ghc-paths 2>/dev/null)/ghc-${GHC}/lib/ghc-${GHC}/settings
 fi
 
