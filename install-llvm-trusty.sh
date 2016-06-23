@@ -37,23 +37,25 @@ else
 
   echo "Installing LLVM from source release"
 
-  TMPDIR=$(mktemp -d)
+  SRCDIR=$(mktemp -d)
+  BUILDDIR=$(mktemp -d)
 
   # Download source distribution
   case ${LLVM} in
-    3.4.*) travis_retry curl -L "http://llvm.org/releases/${LLVM}/llvm-${LLVM}.src.tar.gz" | gunzip | tar -x -C ${TMPDIR} --strip-components 1 ;;
-    *)     travis_retry curl -L "http://llvm.org/releases/${LLVM}/llvm-${LLVM}.src.tar.xz" | unxz   | tar -x -C ${TMPDIR} --strip-components 1 ;;
+    3.4.*) travis_retry curl -L "http://llvm.org/releases/${LLVM}/llvm-${LLVM}.src.tar.gz" | gunzip | tar -x -C ${SRCDIR} --strip-components 1 ;;
+    *)     travis_retry curl -L "http://llvm.org/releases/${LLVM}/llvm-${LLVM}.src.tar.xz" | unxz   | tar -x -C ${SRCDIR} --strip-components 1 ;;
   esac
 
   # Configure, build, install
-  pushd ${TMPDIR}
-  ./configure --prefix=${LLVM_HOME} --enable-shared --enable-targets=host,x86,x86_64,nvptx
+  pushd ${BUILDDIR}
+  ${SRCDIR}/configure --prefix=${LLVM_HOME} --enable-shared --enable-targets=host,x86,x86_64,nvptx
   make -j3
   make install
   popd
 
-  # Delete the temporary build directory
-  rm -rf ${TMPDIR}
+  # Delete the temporary directories
+  rm -rf ${SRCDIR}
+  rm -rf ${BUILDDIR}
 
 fi
 
