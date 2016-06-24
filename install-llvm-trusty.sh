@@ -63,6 +63,6 @@ fi
 # apt). This is a bit of a hack, but is required for llvm-general (>= 3.5.*).
 #
 if [ $(which gcc-4.8) ] && [ -e stack.yaml ]; then
-  sed -i'' -e "s,/usr/bin/gcc,/usr/bin/gcc-4.8," $(stack path --ghc-paths 2>/dev/null)/ghc-${GHC}/lib/ghc-${GHC}/settings
+  sed -i'' -e 's,/usr/bin/gcc.*",/usr/bin/gcc-4.8",' $(stack path --ghc-paths 2>/dev/null)/ghc-${GHC}/lib/ghc-${GHC}/settings
 fi
 
