@@ -53,8 +53,8 @@ git checkout ${DOCS_BRANCH}
 rm -rf *
 cp -R ${LOCAL_DOC_ROOT}/ .
 
-# If there is no change then there is nothing left to do.
-if git diff --quiet; then
+# If there is no change, and no new untracked files, then there is nothing left to do.
+if [ $( git diff --quiet ) ] && [ $( git ls-files --other --directory --exclude-standard | sed q | wc -l ) -eq 0 ]; then
   echo "No update necessary; exiting"
   return 0
 fi
