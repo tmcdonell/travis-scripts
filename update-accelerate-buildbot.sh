@@ -56,6 +56,7 @@ sed -f update_template.sed template/README.md.template       > README.md
 # entry of the build matrix, and thus updates the buildbot repo)
 if git diff --quiet; then
   echo "No update necessary; exiting."
+  popd
   return 0
 fi
 
