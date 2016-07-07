@@ -47,11 +47,10 @@ chmod 600 deploy_key
 eval $(ssh-agent -s)
 ssh-add deploy_key
 
-# Replace the contents of the documentation branch. Note the trailing slash on
-# the copy command.
+# Replace the contents of the documentation branch
 git checkout ${DOCS_BRANCH}
 rm -rf *
-cp -R ${LOCAL_DOC_ROOT}/ .
+cp -R ${LOCAL_DOC_ROOT}/* .
 
 # If there is no change, and no new untracked files, then there is nothing left to do.
 if [ $( git diff --quiet ) ] && [ $( git ls-files --other --directory --exclude-standard | sed q | wc -l ) -eq 0 ]; then
