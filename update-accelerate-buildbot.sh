@@ -31,7 +31,7 @@ fi
 
 # Check out and configure the buildbot repo
 travis_retry git clone ${BUILDBOT_HTTPS_URL} buildbot
-cd buildbot
+pushd buildbot
 git checkout ${TARGET_BRANCH}
 
 git config user.name "Travis CI"
@@ -71,4 +71,6 @@ ssh-add deploy_key
 
 # Now we can push to the buildbot repository
 git push ${BUILDBOT_SSH_URL} ${TARGET_BRANCH}
+
+popd
 
