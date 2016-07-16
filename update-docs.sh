@@ -63,7 +63,7 @@ fi
 git config user.name "Travis CI"
 git config user.email ${TRAVIS_COMMIT_EMAIL}
 
-git add .
+git add --all .
 git commit -m "Update documentation" -m "${TRAVIS_COMMIT}"
 
 git push ${REMOTE_SSH_URL} ${DOCS_BRANCH}
