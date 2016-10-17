@@ -14,7 +14,7 @@ fi
 
 SOURCE_BRANCH=master
 TARGET_BRANCH=master
-BUILDBOT_HTTPS_URL=https://github.com/tmcdonell/accelerate-travis-buildbot.git
+BUILDBOT_HTTPS_URL=https://github.com/tmcdonell-bot/accelerate-travis-buildbot.git
 BUILDBOT_SSH_URL=${BUILDBOT_HTTPS_URL/https:\/\/github.com\//git@github.com:}
 
 # Find out who initiated the build
