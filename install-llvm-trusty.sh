@@ -48,17 +48,17 @@ else
 
   # Configure, build, install
   # Use configure-based build system for old versions of LLVM. Use CMake-based
-  # system for LLVM-3.8 and onwards. Assume at least 3.x series.
+  # system for LLVM-3.9 and onwards (required). Assume at least 3.x series.
   pushd ${BUILDDIR}
   case ${LLVM} in
-    3.[0-7].*)
+    3.[0-8].*)
       ${SRCDIR}/configure --prefix=${LLVM_HOME} --enable-shared --enable-targets=host,x86,x86_64,nvptx
       make -j3
       make install
       ;;
 
     *)
-      cmake -DCMAKE_INSTALL_PREFIX=${LLVM_HOME} -DLLVM_BUILD_LLVM_DYLIB=True -DLLVM_TARGETS_TO_BUILD="X86;NVPTX" ${SCRDIR}
+      cmake -DCMAKE_INSTALL_PREFIX=${LLVM_HOME} -DLLVM_BUILD_LLVM_DYLIB=True -DLLVM_TARGETS_TO_BUILD="X86;NVPTX" ${SRCDIR}
       cmake --build . -- -j3
       cmake --build . --target install
       ;;
