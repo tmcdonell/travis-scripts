@@ -6,7 +6,7 @@
 #
 language: generic
 dist: trusty
-sudo: false
+sudo: required
 
 cache:
   directories:
@@ -23,13 +23,13 @@ matrix:
       compiler: "GHC 7.10"
       addons: { apt: { sources: [ hvr-ghc, ubuntu-toolchain-r-test ], packages: [ nvidia-cuda-toolkit, g++-4.8, libgmp-dev, cabal-install-1.22, happy-1.19.5, alex-3.1.7 ] }}
 
-    - env: GHC=8.0.1 CABAL=1.24 LLVM=3.6.2
+    - env: GHC=8.0.1 CABAL=1.24 LLVM=3.8.1
       compiler: "GHC 8.0"
-      addons: { apt: { sources: [ hvr-ghc, ubuntu-toolchain-r-test ], packages: [ nvidia-cuda-toolkit, g++-4.8, libgmp-dev, cabal-install-1.24, happy-1.19.5, alex-3.1.7 ] }}
+      addons: { apt: { sources: [ hvr-ghc, ubuntu-toolchain-r-test, llvm-toolchain-trusty-3.8 ], packages: [ nvidia-cuda-toolkit, g++-4.8, llvm-3.8-dev, libgmp-dev, cabal-install-1.24, happy-1.19.5, alex-3.1.7 ] }}
 
-    - env: GHC=head CABAL=head LLVM=3.8.0
+    - env: GHC=head CABAL=head LLVM=3.9.0
       compiler: "GHC HEAD"
-      addons: { apt: { sources: [ hvr-ghc, ubuntu-toolchain-r-test ], packages: [ nvidia-cuda-toolkit, g++-4.8, ghc-head, cabal-install-head, happy-1.19.5, alex-3.1.7 ] }}
+      addons: { apt: { sources: [ hvr-ghc, ubuntu-toolchain-r-test, llvm-toolchain-trusty-3.9 ], packages: [ nvidia-cuda-toolkit, g++-4.8, llvm-3.9-dev, ghc-head, cabal-install-head, happy-1.19.5, alex-3.1.7 ] }}
 
   allow_failures:
     - env: GHC=head CABAL=head LLVM=3.8.0
@@ -40,7 +40,11 @@ before_install:
   - export PATH=/opt/cabal/$CABAL/bin:/opt/alex/3.1.7/bin:/opt/happy/1.19.5/bin:$HOME/.cabal/bin:$PATH
   - export UPGRADE_CABAL=1
   - source .travis/install-stack.sh
-  - source .travis/install-llvm-trusty.sh
+  - |
+      case ${GHC} in
+        7.*) source .travis/install-llvm-trusty.sh ;;
+      esac
+  - source .travis/update-ghc-settings.sh
 
 install:
   - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
