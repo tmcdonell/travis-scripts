@@ -19,13 +19,13 @@ travis_retry curl -L "https://www.stackage.org/stack/linux-x86_64" | gunzip | ta
 mv stack-*/stack $HOME/bin
 
 if [ ${GHC} != head ]; then
-  ln -s stack-${GHC%.*}.yaml stack.yaml
-  travis_retry stack setup ${GHC} --no-terminal --no-system-ghc
+  [ -e stack.yaml ] || ln -s stack-${GHC%.*}.yaml stack.yaml
+  travis_retry stack setup --no-terminal --no-system-ghc
 else
   export PATH=/opt/ghc/$GHC/bin:${PATH}
 fi
 
 if [ ${GHC} != head -a ${UPGRADE_CABAL:-0} -ne 0 ]; then
-  travis_retry stack setup ${GHC} --no-terminal --upgrade-cabal
+  travis_retry stack setup --no-terminal --upgrade-cabal
 fi
 
