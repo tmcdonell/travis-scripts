@@ -12,5 +12,5 @@ function update_ghc_settings {
 
 update_ghc_settings gcc-4.8
 update_ghc_settings gcc-4.9
-update_ghc_settings gcc-5.0
+update_ghc_settings gcc-5
 
