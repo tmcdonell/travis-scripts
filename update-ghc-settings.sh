@@ -22,5 +22,5 @@ update_gcc_setting gcc-4.8
 update_gcc_setting gcc-4.9
 update_gcc_setting gcc-5
 
-update_ld_setting  ld.gold
+# update_ld_setting  ld.gold
 
