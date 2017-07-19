@@ -46,10 +46,7 @@ cat update_template.sed \
 mv update_template.sed.bak update_template.sed
 
 # Update the templates.
-sed -f update_template.sed template/stack-8.0.yaml.template  > stack-8.0.yaml
-sed -f update_template.sed template/stack-7.8.yaml.template  > stack-7.8.yaml
-sed -f update_template.sed template/stack-7.10.yaml.template > stack-7.10.yaml
-sed -f update_template.sed template/README.md.template       > README.md
+sh do_update.sh
 
 # If there is no change then there is nothing left to do so we can exit early
 # (this can happen because it is a race to see who successfully completes their
