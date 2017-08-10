@@ -13,7 +13,7 @@
 travis_retry cabal update
 sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
 
-mkdir $HOME/bin
+mkdir -p $HOME/bin
 export PATH=$HOME/bin:$PATH
 travis_retry curl -L "https://www.stackage.org/stack/linux-x86_64" | gunzip | tar -x
 mv stack-*/stack $HOME/bin
