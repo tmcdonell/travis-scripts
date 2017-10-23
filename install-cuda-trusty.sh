@@ -18,4 +18,6 @@ export CUDA_HOME=/usr/local/cuda-${CUDA:0:3}
 export LD_LIBRARY_PATH=${CUDA_HOME}/nvvm/lib64:${LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
 export PATH=${CUDA_HOME}/bin:${PATH}
+sudo ldconfig ${CUDA_HOME}/lib64
+sudo ldconfig ${CUDA_HOME}/nvvm/lib64
 
