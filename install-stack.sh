@@ -10,13 +10,19 @@
 # Setting environment variable UPGRADE_CABAL to non-zero will do as it suggests.
 #
 
-travis_retry cabal update
-sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
+# travis_retry cabal update
+# sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config
 
-mkdir -p $HOME/bin
-export PATH=$HOME/bin:$PATH
-travis_retry curl -L "https://www.stackage.org/stack/linux-x86_64" | gunzip | tar -x
-mv stack-*/stack $HOME/bin
+mkdir -p ${HOME}/bin
+export PATH=${HOME}/bin:${PATH}
+export PATH=${HOME}/.local/bin:${PATH}
+
+# automatic install script: does this require sudo?
+travis_retry curl -sSL https://get.haskellstack.org/ | sh
+
+# manual install:
+# travis_retry curl -L "https://www.stackage.org/stack/linux-x86_64" | gunzip | tar -x
+# mv stack-*/stack $HOME/bin
 
 if [ ${GHC} != head ]; then
   [ -e stack.yaml ] || ln -s stack-${GHC%.*}.yaml stack.yaml
