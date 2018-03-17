@@ -30,7 +30,7 @@ if [ ${TRAVIS_PULL_REQUEST} != false -o ${TRAVIS_BRANCH} != ${SOURCE_BRANCH} ]; 
 fi
 
 # Check out and configure the buildbot repo
-travis_retry git clone ${BUILDBOT_HTTPS_URL} buildbot
+travis_retry git clone --depth=1 ${BUILDBOT_HTTPS_URL} buildbot
 pushd buildbot
 git checkout ${TARGET_BRANCH}
 
@@ -68,7 +68,7 @@ eval $(ssh-agent -s)
 ssh-add deploy_key
 
 # Now we can push to the buildbot repository
-git push ${BUILDBOT_SSH_URL} ${TARGET_BRANCH}
+travis_retry git push ${BUILDBOT_SSH_URL} ${TARGET_BRANCH}
 
 popd
 
