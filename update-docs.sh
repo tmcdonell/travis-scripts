@@ -37,7 +37,7 @@ fi
 # $ git checkout --orphan gh-pages
 # $ git reset --hard
 #
-travis_retry git clone ${REMOTE_HTTPS_URL} docs
+travis_retry git clone --depth=50 --no-single-branch ${REMOTE_HTTPS_URL} docs
 pushd docs
 
 # Get the deploy key from the travis encrypted file. Assume that this exists on
@@ -66,7 +66,7 @@ git config user.email ${TRAVIS_COMMIT_EMAIL}
 git add --all .
 git commit -m "Update documentation" -m "${TRAVIS_COMMIT}"
 
-git push ${REMOTE_SSH_URL} ${DOCS_BRANCH}
+travis_retry git push ${REMOTE_SSH_URL} ${DOCS_BRANCH}
 
 popd
 
