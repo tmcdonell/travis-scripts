@@ -15,7 +15,11 @@ export CUDA_VER=$(expr ${CUDA} : '\([0-9]*\.[0-9]*\)')
 export CUDA_APT=${CUDA_VER/./-}
 travis_retry sudo apt-get install -y cuda-drivers cuda-core-${CUDA_APT} cuda-cudart-dev-${CUDA_APT}
 if [ ${CUDA_INSTALL_EXTRA_LIBS:-1} -ne 0 ]; then
-  travis_retry sudo apt-get install -y cuda-cufft-dev-${CUDA_APT} cuda-cublas-dev-${CUDA_APT} cuda-cusparse-dev-${CUDA_APT} cuda-cusolver-dev-${CUDA_APT}
+  if [ ${CUDA_VER%.*} -lt 7 ]; then
+    travis_retry sudo apt-get install -y cuda-cufft-dev-${CUDA_APT} cuda-cublas-dev-${CUDA_APT} cuda-cusparse-dev-${CUDA_APT}
+  else
+    travis_retry sudo apt-get install -y cuda-cufft-dev-${CUDA_APT} cuda-cublas-dev-${CUDA_APT} cuda-cusparse-dev-${CUDA_APT} cuda-cusolver-dev-${CUDA_APT}
+  fi
 fi
 travis_retry sudo apt-get clean
 export CUDA_HOME=/usr/local/cuda-${CUDA_VER}
