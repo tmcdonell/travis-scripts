@@ -24,7 +24,11 @@ export PATH=${HOME}/.local/bin:${PATH}
 travis_retry curl -L "https://www.stackage.org/stack/linux-x86_64" | gunzip | tar -x
 mv stack-*/stack $HOME/bin
 
-if [ ${GHC} != head ]; then
+if [ ${GHC%.*} == "7.8" ]; then
+  travis_retry stack upgrade --binary-version 1.9.3
+fi
+
+if [ ${GHC} != "head" ]; then
   [ -e stack.yaml ] || ln -s stack-${GHC%.*}.yaml stack.yaml
   travis_retry stack setup --no-terminal --no-system-ghc
   travis_retry stack update --no-terminal
